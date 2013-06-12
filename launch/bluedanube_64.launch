@@ -4,13 +4,12 @@
 -->
 <launch>
 	<!-- start the driver node -->
-	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true">
+	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true"  args="-ip 192.168.1.64">
 		<!-- args="-ip 192.168.1.64" -->
 		<!-- Modifies the drone's onboard parameters. 
 		If not specified, drone default will be used (consult SDK or ardrone_autonomy wiki) -->
 		<param name="outdoor" value="0" />
 		<param name="flight_without_shell" value="0" />
-		<param name="navdata_demo" value="false" /> <!-- -->
 
 		<param name="max_bitrate" value="2000" />
 		<param name="bitrate" value="2000" />
@@ -19,15 +18,9 @@
 		<param name="altitude_max" value="5000" />
 		<param name="altitude_min" value="300" />
 
-		<param name="control_vz_max" value="2000" />
-		<param name="control_yaw" value="6.11" />
-		<param name="euler_angle_max" value="0.35" />
-
-		<param name="detect_type" value="10" /> <!-- 10.CAD_TYPE_MULTIPLE_DETECTION_MODE 3.disabled -->
-		<param name="detections_select_h" value="4" /> <!-- TAG_TYPE_BLACK_ROUNDEL 128 COCARDE 4 NONE 0 -->
-		<param name="detections_select_v" value="0" />
-		<param name="detections_select_v_hsync" value="0" />
-		<param name="enable_navdata_vision_detect" value="true" />		
+		<param name="detect_type" value="4" /> <!-- 10.CAD_TYPE_MULTIPLE_DETECTION_MODE 3.disabled -->
+		<param name="detections_select_h" value="0" /> <!-- TAG_TYPE_BLACK_ROUNDEL 128 COCARDE 4 NONE 0 -->
+		<param name="detections_select_v" value="4" />	
 		
 		<param name="enemy_colors" value="0" />
 		<param name="enemy_without_shell" value="0" />
