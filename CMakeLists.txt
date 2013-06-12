@@ -73,7 +73,8 @@ include_directories(include
 # add_executable(test_flights_node src/test_flights_node.cpp)
 add_executable(FlashLEDs src/FlashLEDs.cpp)
 add_executable(DetectTarget src/DetectTarget.cpp)
-add_executable(BlueDanube src/BlueDanube.cpp)
+add_executable(BlueDanube src/Drone.cpp src/BlueDanube.cpp)
+add_executable(testfly src/test_fly.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -83,6 +84,7 @@ add_executable(BlueDanube src/BlueDanube.cpp)
 target_link_libraries(DetectTarget ${catkin_LIBRARIES} )
 target_link_libraries(FlashLEDs ${catkin_LIBRARIES} )
 target_link_libraries(BlueDanube ${catkin_LIBRARIES} )
+target_link_libraries(testfly ${catkin_LIBRARIES} )
 
 #############
 ## Install ##

@@ -3,6 +3,8 @@
 #include "ardrone_autonomy/FlightAnim.h"
 #include "ardrone_autonomy/LedAnim.h"
 
+#include "Drone.h"
+
 /* List of the flight animations and their enum number.
 # 0 : ARDRONE_ANIM_PHI_M30_DEG
 # 1 : ARDRONE_ANIM_PHI_30_DEG
@@ -43,23 +45,7 @@ int main(int argc, char** argv)
 {
 	ROS_INFO("Blue Danube Dance");
 	ros::init(argc, argv, "BlueDanubeDance");
-
-	ros::NodeHandle node;
-
-	ros::Publisher takeoff = node.advertise<std_msgs::Empty>("/ardrone/takeoff", 1); /* Message queue length is just 1 */
-	ros::Publisher land = node.advertise<std_msgs::Empty>("/ardrone/land", 1); /* Message queue length is just 1 */
-	ros::Publisher reset = node.advertise<std_msgs::Empty>("/ardrone/reset", 1);
-
-	//sets up the LED and flight animation services
-	ros::ServiceClient ledClient = node.serviceClient<ardrone_autonomy::LedAnim>("/ardrone/setledanimation");
-	ros::ServiceClient flightClient = node.serviceClient<ardrone_autonomy::FlightAnim>("/ardrone/setflightanimation");
-
-	ardrone_autonomy::LedAnim ledMsg;
-	ardrone_autonomy::FlightAnim flightMsg;
-	std_msgs::Empty emptyMsg;
-	ledMsg.request.type = 7; //RED
-	ledMsg.request.freq = 1.0; //1Hz
-	ledMsg.request.duration = 1; //1 second
+	Drone d;
 
 	double startTime = ros::Time::now().toSec();
 	ROS_INFO("start time is %f", startTime);
@@ -68,28 +54,14 @@ int main(int argc, char** argv)
 	//{
 		ROS_INFO("sending led request");
 
-		if( ledClient.call(ledMsg) ) //if service call successful
-		{
-			ROS_INFO("successfully set leds?. Response was %d", ledMsg.response.result? 1:0);
-		}
-		else
-		{
-			ROS_INFO("unsuccessful set leds request");
-		}
-		ROS_INFO("waiting 4.5 seconds");
-		waitSomeSeconds(4.5);
-		ROS_INFO("finished waiting");
+		d.doLEDAnimation(7, 1, 2);
+		ROS_INFO("Sending take off");
+		d.takeOff(5);
+		ROS_INFO("waiting");
+		d.waitSeconds(5);
+		ROS_INFO("landing");
+		d.land(5);
 
-		ROS_INFO("sending led request");
-		ledMsg.request.type = 3; //BLINK ORANGE
-		if( ledClient.call(ledMsg) ) //if service call successful
-		{
-			ROS_INFO("successfully set leds?. Response was %d", ledMsg.response.result? 1:0);
-		}
-		else
-		{
-			ROS_INFO("unsuccessful set leds request");
-		}
 
 		ros::spinOnce();	//refreshes subscriptions
 	//}
