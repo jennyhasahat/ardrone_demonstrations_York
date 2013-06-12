@@ -71,6 +71,8 @@ public:
 		-# 17: ARDRONE_ANIM_FLIP_BEHIND
 		-# 18: ARDRONE_ANIM_FLIP_LEFT
 		-# 19: ARDRONE_ANIM_FLIP_RIGHT
+	 * flight animations don't block control, so if you run a flight animation
+	 * control will go straight back to your program WHILST the animation is running
 	 * */
 	bool doFlightAnimation(int type, int duration);
 
