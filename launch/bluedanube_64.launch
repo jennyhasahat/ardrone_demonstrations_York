@@ -8,9 +8,13 @@
 		<!-- args="-ip 192.168.1.64" -->
 		<!-- Modifies the drone's onboard parameters. 
 		If not specified, drone default will be used (consult SDK or ardrone_autonomy wiki) -->
+		
+		<!-- <param name="do_imu_caliberation" value="1" /> might get the imu to reset after start up? -->
+		
 		<param name="outdoor" value="0" />
 		<param name="flight_without_shell" value="0" />
-		<param name="navdata_demo" value="true" />
+		<param name="navdata_demo" value="0" />
+		<param name="flying_mode" value="1" />
 
 		<param name="max_bitrate" value="2000" />
 		<param name="bitrate" value="2000" />
@@ -23,13 +27,16 @@
 		<param name="detections_select_h" value="0" /> <!-- TAG_TYPE_BLACK_ROUNDEL 128 COCARDE 4 NONE 0 -->
 		<param name="detections_select_v" value="4" />	
 		
+		<param name="enable_navdata_vision_detect" value="true" />
+		<param name="enable_navdata_demo" value="true" />
+		
 		<param name="enemy_colors" value="0" />
 		<param name="enemy_without_shell" value="0" />
-		<param name="do_imu_caliberation" value="false" />
+		<param name="do_imu_caliberation" value="false" /><!-- might get the imu to reset after start up? -->
 		<param name="tf_prefix" value="mydrone" />
 
 		<!-- Enables the standard /ardrone/navdata, imu and mag topics. If not specified, defaults to TRUE -->
-		<param name="enable_legacy_navdata" value="true" />
+		<param name="enable_legacy_navdata" value="false" />
 
 		<!-- Tunes the speed at which the ros loop runs, and thus, the rate at which navdata is published -->
 		<param name="looprate" value="50" />

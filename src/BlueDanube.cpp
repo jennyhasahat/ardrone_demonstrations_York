@@ -1,7 +1,8 @@
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
-#include "ardrone_autonomy/FlightAnim.h"
-#include "ardrone_autonomy/LedAnim.h"
+//#include "ardrone_autonomy/FlightAnim.h"
+//#include "ardrone_autonomy/LedAnim.h"
+#include <geometry_msgs/Twist.h>
 
 #include "Drone.h"
 
@@ -57,56 +58,58 @@ int main(int argc, char** argv)
 		ROS_INFO("Sending take off");
 		d.takeOff(5);
 		ROS_INFO("sending led request");
-		//d.doLEDAnimation(0, 3.0, 25);
+		d.doLEDAnimation(Drone::LED_SNAKE_GREEN_RED, 3.0, 25);
 
 		ROS_INFO("do do be do dooo 1");
 		d.waitSeconds(initial_interval);
 		ROS_INFO("na na 1");
-		d.doFlightAnimation(3, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_THETA_30_DEG, 0.5);
 		d.waitSeconds(nana);
-		d.doFlightAnimation(2, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_THETA_M30_DEG, 0.5);
 
 		ROS_INFO("do do be do dooo 2");
 		d.waitSeconds(dedadadedaaa+0.3);
 		ROS_INFO("na na 2");
-		d.doFlightAnimation(1, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_PHI_30_DEG, 0.5);
 		d.waitSeconds(nana);
-		d.doFlightAnimation(0, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_PHI_M30_DEG, 0.5);
 
 		ROS_INFO("do do be do dooo 3");
 		d.waitSeconds(dedadadedaaa);
 		ROS_INFO("na na 3");
-		d.doFlightAnimation(3, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_THETA_30_DEG, 0.5);
 		d.waitSeconds(nana);
-		d.doFlightAnimation(2, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_THETA_M30_DEG, 0.5);
 
 		ROS_INFO("do do be do dooo 4");
 		d.waitSeconds(dedadadedaaa);
 		ROS_INFO("na na 4");
-		d.doFlightAnimation(1, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_PHI_30_DEG, 0.5);
 		d.waitSeconds(nana-0.2);
-		d.doFlightAnimation(0, 0.5);
+		d.doFlightAnimation(Drone::FLIGHT_PHI_M30_DEG, 0.5);
 
 		ROS_INFO("do do be do dooo 5");
 		d.waitSeconds(dedadadedaaa-0.5);
 		ROS_INFO("na na 5");
-		d.doFlightAnimation(11, 1);
+		d.doFlightAnimation(Drone::FLIGHT_THETA_DANCE, 1);
 		d.waitSeconds(nana-0.2);
-		d.doFlightAnimation(8, 1);
+		d.doFlightAnimation(Drone::FLIGHT_YAW_SHAKE, 1);
 
 		ROS_INFO("do do be do dooo 6");
 		d.waitSeconds(dedadadedaaa-0.5);
 		ROS_INFO("na na 6");
-		d.doFlightAnimation(12, 1);
+		d.setSpeeds(0,0,0,0.5);
 		d.waitSeconds(nana-0.25);
-		d.doFlightAnimation(14, 1);
+		d.setSpeeds(0,0,0,-0.5);
+
+		//d.waitSeconds(nana-0.25);
 
 		//grand finalé
 		ROS_INFO("grand finalé!");
 		d.waitSeconds(0.35);
-		//yaw left
+		d.setSpeeds(0,0,0.5,0);
 		d.waitSeconds(2.5);
-		d.doFlightAnimation(7, 4.5);
+		d.doFlightAnimation(Drone::FLIGHT_TURNAROUND_GODOWN, 4.5);
 		d.waitSeconds(5);		
 
 		ROS_INFO("landing");
