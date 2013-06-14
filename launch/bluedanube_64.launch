@@ -9,8 +9,6 @@
 		<!-- Modifies the drone's onboard parameters. 
 		If not specified, drone default will be used (consult SDK or ardrone_autonomy wiki) -->
 		
-		<!-- <param name="do_imu_caliberation" value="1" /> might get the imu to reset after start up? -->
-		
 		<param name="outdoor" value="0" />
 		<param name="flight_without_shell" value="0" />
 		<param name="navdata_demo" value="0" />

@@ -40,10 +40,10 @@ public:
 				FLIGHT_WAVE,
 				FLIGHT_PHI_THETA_MIXED,
 				FLIGHT_DOUBLE_PHI_THETA_MIXED, // 15
-				FLIGHT_FLIP_AHEAD,
-				FLIGHT_FLIP_BEHIND,
-				FLIGHT_FLIP_LEFT,
-				FLIGHT_FLIP_RIGHT};
+				FLIGHT_FLIP_AHEAD,	//not available on ardrone 1
+				FLIGHT_FLIP_BEHIND,	//not available on ardrone 1
+				FLIGHT_FLIP_LEFT,	//not available on ardrone 1
+				FLIGHT_FLIP_RIGHT};	//not available on ardrone 1
 
 	typedef void (*navdata_demo_function)(const ardrone_autonomy::navdata_demo::ConstPtr&);
 	typedef void (*navdata_vision_detect_function)(const ardrone_autonomy::navdata_vision_detect::ConstPtr&);
@@ -122,9 +122,15 @@ public:
 	 * */
 	bool doFlightAnimation(int type);
 
+	/**Recalibrates the robot for a flat surface.
+	 * ONLY CALL THIS WHEN THE DRONE IS ON A FLAT SURFACE.
+	 * */
+	void flatTrim(void);
+
 	// MISC FUNCTIONS
 	void waitSeconds(double wait);
 	void setAutoHoverEnable(bool newstate);
+	ros::NodeHandle* getROSNodeHandle(void);
 
 protected:
 	ros::NodeHandle node;

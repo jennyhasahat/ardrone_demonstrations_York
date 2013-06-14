@@ -1,4 +1,5 @@
 #include <geometry_msgs/Twist.h>
+#include <std_srvs/Empty.h>
 #include "Drone.h"
 #include "ardrone_autonomy/FlightAnim.h"
 #include "ardrone_autonomy/LedAnim.h"
@@ -130,6 +131,16 @@ bool Drone::doFlightAnimation(int type)
 	return doFlightAnimation(type, 0);
 }
 
+void Drone::flatTrim(void)
+{
+	std_srvs::Empty empty;
+	ros::ServiceClient flat_trim_client = \
+			node.serviceClient<std_srvs::Empty>(rosNameSpace+"/ardrone/flattrim");
+
+	ROS_INFO("sending flat trim service request");
+	flat_trim_client.call(empty);
+}
+
 
 void Drone::waitSeconds(double wait)
 {
@@ -147,6 +158,11 @@ void Drone::setAutoHoverEnable(bool newstate)
 	isAutoHoverDisabled = (newstate? 0:1);
 	ROS_INFO("AutoHoverDisabled set to %f", isAutoHoverDisabled);
 	return;
+}
+
+ros::NodeHandle* Drone::getROSNodeHandle(void)
+{
+	return &node;
 }
 
 void Drone::navdataDemoCallback(const ardrone_autonomy::navdata_demo::ConstPtr& msg)
