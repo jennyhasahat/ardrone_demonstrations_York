@@ -27,10 +27,10 @@
 int main(int argc, char** argv)
 {
 	ROS_INFO("Blue Danube Dance");
-	ros::init(argc, argv, "BlueDanubeDance");
-	Drone d;
+	ros::init(argc, argv, "BlueDanubeR");
+	Drone d("/dronesR");
 
-	double initial_interval = 4.3;
+	double initial_interval = 3.3;
 	double dedadadedaaa = 3.5;
 	double nana = 1.3;//1.45;
 
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 		d.takeOff(5);
 		d.setSpeeds(0,0,0,0);
 		ROS_INFO("sending led request");
-		//d.doLEDAnimation(Drone::LED_SNAKE_GREEN_RED, 0.5, 25);
+		d.doLEDAnimation(Drone::LED_SNAKE_GREEN_RED, 0.5, 35);
 
 		ROS_INFO("do do be do dooo 1");
 		d.waitSeconds(initial_interval);
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 		d.waitSeconds(dedadadedaaa-0.5);
 		ROS_INFO("na na 5");
 		ROS_INFO("yaw right?");
-		d.setSpeeds(0,0.2,-1,0); //yaw right
+		d.setSpeeds(0,0,-1,0); //yaw right
 		d.waitSeconds(nana-0.2);
 		d.setSpeeds(0,0,0,0); //stop
 		d.setSpeeds(0,0,1,0); //yaw left?

@@ -73,7 +73,8 @@ include_directories(include
 # add_executable(test_flights_node src/test_flights_node.cpp)
 add_executable(FlashLEDs src/FlashLEDs.cpp)
 add_executable(DetectTarget src/DetectTarget.cpp)
-add_executable(BlueDanube src/Drone.cpp src/BlueDanube.cpp)
+add_executable(BlueDanubeR src/Drone.cpp src/BlueDanubeR.cpp)
+add_executable(BlueDanubeL src/Drone.cpp src/BlueDanubeL.cpp)
 add_executable(UsingSubscriptionsDemo src/Drone.cpp src/usingSubscriptionsDemo.cpp)
 add_executable(testfly src/Drone.cpp src/test_drone.cpp)
 
@@ -84,7 +85,8 @@ add_executable(testfly src/Drone.cpp src/test_drone.cpp)
 # Specify libraries to link a library or executable target against
 target_link_libraries(DetectTarget ${catkin_LIBRARIES} )
 target_link_libraries(FlashLEDs ${catkin_LIBRARIES} )
-target_link_libraries(BlueDanube ${catkin_LIBRARIES} )
+target_link_libraries(BlueDanubeR ${catkin_LIBRARIES} )
+target_link_libraries(BlueDanubeL ${catkin_LIBRARIES} )
 target_link_libraries(UsingSubscriptionsDemo ${catkin_LIBRARIES} )
 target_link_libraries(testfly ${catkin_LIBRARIES} )
 

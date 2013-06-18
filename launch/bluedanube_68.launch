@@ -1,6 +1,6 @@
 <launch>
 	<!-- start the driver node -->
-	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true"  args="-ip 192.168.1.64">
+	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true"  args="-ip 192.168.1.68">
 		<!-- args="-ip 192.168.1.64" -->
 		<!-- Modifies the drone's onboard parameters. 
 		If not specified, drone default will be used (consult SDK or ardrone_autonomy wiki) -->

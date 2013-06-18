@@ -1,0 +1,12 @@
+<!-- this sets the parameters that the driver will set the drone with.
+		see the SDK documentation for a description of what these values mean.
+		This file is a modified version of ardrone_autonomy/launch/ardrone_aggressive.launch
+-->
+<launch>
+	<group ns="dronesL">
+		<include file="$(find test_flights)/launch/bluedanube_64.launch" />
+	</group>
+	<group ns="dronesR">
+		<include file="$(find test_flights)/launch/bluedanube_68.launch" />
+	</group>
+</launch>
