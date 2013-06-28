@@ -4,9 +4,9 @@
 -->
 <launch>
 	<group ns="dronesL">
-		<include file="$(find test_flights)/launch/bluedanube_64.launch" />
+		<include file="$(find test_flights)/launch/bd_64.launch" />
 	</group>
 	<group ns="dronesR">
-		<include file="$(find test_flights)/launch/bluedanube_68.launch" />
+		<include file="$(find test_flights)/launch/bd_68.launch" />
 	</group>
 </launch>
