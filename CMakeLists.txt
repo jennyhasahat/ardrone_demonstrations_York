@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(test_flights)
+project(ardrone_demonstrations_York)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS ardrone_autonomy roscpp std_msgs geometry_msgs)
+find_package(catkin REQUIRED COMPONENTS ardrone_autonomy tum_ardrone roscpp std_msgs geometry_msgs std_srvs)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -50,7 +50,7 @@ find_package(catkin REQUIRED COMPONENTS ardrone_autonomy roscpp std_msgs geometr
 catkin_package(
    INCLUDE_DIRS include
 #  LIBRARIES test_flights
-  CATKIN_DEPENDS ardrone_autonomy roscpp std_msgs geometry_msgs
+  CATKIN_DEPENDS ardrone_autonomy tum_ardrone roscpp std_msgs geometry_msgs
 #  DEPENDS system_lib
 )
 
@@ -73,7 +73,9 @@ include_directories(include
 # add_executable(test_flights_node src/test_flights_node.cpp)
 add_executable(BlueDanubeR src/Drone.cpp src/BlueDanubeR.cpp)
 add_executable(BlueDanubeL src/Drone.cpp src/BlueDanubeL.cpp)
-add_executable(testfly src/Drone.cpp src/test_drone.cpp)
+add_executable(TargetAggregation src/LocateTarget.cpp src/main_LocateTarget.cpp)
+add_executable(TargetAggregation_joystick src/LocateTarget.cpp src/LocateTargetJoystickControl.cpp src/main_LocateTargetJoystick.cpp)
+
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -82,7 +84,8 @@ add_executable(testfly src/Drone.cpp src/test_drone.cpp)
 # Specify libraries to link a library or executable target against
 target_link_libraries(BlueDanubeR ${catkin_LIBRARIES} )
 target_link_libraries(BlueDanubeL ${catkin_LIBRARIES} )
-target_link_libraries(testfly ${catkin_LIBRARIES} )
+target_link_libraries(TargetAggregation ${catkin_LIBRARIES})
+target_link_libraries(TargetAggregation_joystick ${catkin_LIBRARIES})
 
 #############
 ## Install ##

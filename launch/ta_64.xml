@@ -1,0 +1,30 @@
+<launch>
+	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" required="true" args="-ip 192.168.1.64">
+		<!-- the TUM ardrone initialisation stuff -->
+		<param name="navdata_demo" value="False" /><!-- or 0? -->
+		<param name="realtime_navdata" value="True" />
+		<param name="realtime_video" value="True" />
+		<param name="looprate" value="200" /> <!-- 30? 50? 500? -->
+		
+		<param name="ardrone_name" value="SKYNET64" />
+				
+		<param name="outdoor" value="0" />
+		<param name="flight_without_shell" value="0" />
+		<param name="enemy_colors" value="0" />
+		<param name="enemy_without_shell" value="0" />
+		<param name="altitude_max" value="3000" />
+		<param name="altitude_min" value="300" />
+		
+		<param name="ultrasound_freq" value="7" /> <!--22Hz-->
+			
+		<!-- Enables the standard /ardrone/navdata, imu and mag topics. If not specified, defaults to TRUE 
+			I think the state estimation node from TU Munich uses the legacy navdata to work.-->
+		<param name="enable_legacy_navdata" value="true" />
+		
+		<!-- TAG detection parameters -->
+		<param name="detect_type" value="10" /> <!-- 10.CAD_TYPE_MULTIPLE_DETECTION_MODE 3.disabled -->
+		<param name="detections_select_h" value="4" /> <!-- TAG_TYPE_BLACK_ROUNDEL 128 COCARDE 4 NONE 0 -->
+		<param name="detections_select_v" value="0" />	
+		<param name="enable_navdata_vision_detect" value="true" />
+	</node>
+</launch>
