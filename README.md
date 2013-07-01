@@ -74,7 +74,7 @@ Joystick Controlled Aggregation
 ### Set up
 This demonstration requires you to have [set up multiple drones](#using-multiple-drones).
 
-As with the [joystick control of one drone demo](#joystick-control-of-one-drone), this code is optimised for the Logitech Extreme 3D pro joystick. The TUM autopilot specific buttons can be re-mapped by changing lines 146 to 149 of <src/joystick2TUMARDroneInterpreter.py>. The current mapping is:
+As with the [joystick control of one drone demo](#joystick-control-of-one-drone), this code is optimised for the Logitech Extreme 3D pro joystick. The TUM autopilot specific buttons can be re-mapped by changing lines 146 to 149 of [joystick2TUMARDroneInterpreter.py](src/joystick2TUMARDroneInterpreter.py). The current mapping is:
 * Send Coords to followers: 7
 * Reset PTAM (the feature tracking): 8
 * Land the follower drones: 9
