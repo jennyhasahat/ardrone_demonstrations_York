@@ -6,15 +6,15 @@
 	<!-- Launches the joystick to ardrone remapping -->
 	<node name="joystick_controller" pkg="ardrone_demonstrations_york" type="joystick_controller.py" output="screen" required="true">
 		<!-- Configures the joystick button mapping -->
-		<param name="ButtonEmergency"		value="11" /> <!--2=top of stick numbered 3, 11=button 12-->
-		<param name="ButtonLand"		value="10" /> <!--1=thumb button numbered 2, 10=button 11-->
+		<param name="ButtonEmergency"		value="11" />
+		<param name="ButtonLand"		value="10" />
 		<param name="ButtonTakeoff"		value="0" /> <!--trigger-->
 
 		<!-- Configures the joystick axis mapping -->
 		<param name="AxisRoll"			value="0" />
 		<param name="AxisPitch"			value="1" />
 		<param name="AxisYaw"			value="2" />
-		<param name="AxisZ"			value="5" /> <!--5 = joystick-like button on top. 3 = +/- flipper at front-->
+		<param name="AxisZ"			value="5" />
 
 		<!-- Configures the joystick mapping. Joystick axe readings are divided by these numbers-->
 		<param name="ScaleRoll"			value="5" />
@@ -23,7 +23,7 @@
 		<param name="ScaleZ"			value="1.5" />
 	</node>
 	
-	<!-- if using a SKYNET drone change the ip address to the drone you're using. Otherwise remove the args="..." bit-->
+	<!-- if using a swarm drone change the ip address to the drone you're using. Otherwise remove the args="..." bit-->
 	<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" args="-ip 192.168.1.64">
 		<param name="navdata_demo" value="true" />
 		<param name="looprate" value="50" />
