@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include "LocateTarget.h"
+#include "TargetAggregation.h"
 
 
 int main(int argc, char** argv)
@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 	ROS_INFO("Locate Target Joystick Control");
 	ros::init(argc, argv, "LocateTargetJoystickControl");
 
-	LocateTargetJoystickControl lt;
+	TargetAggregationJoystickControl lt;
 	lt.run();
 
 	return 0;

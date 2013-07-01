@@ -3,7 +3,7 @@
 #include <string>
 
 #include "ardrone_autonomy/LedAnim.h"
-#include "LocateTarget.h"
+#include "TargetAggregation.h"
 
 
 
@@ -15,20 +15,20 @@
  * */
 
 
-LocateTargetJoystickControl::LocateTargetJoystickControl(void)
-: LocateTarget()
+TargetAggregationJoystickControl::TargetAggregationJoystickControl(void)
+: TargetAggregation()
 {
 	tumcom_sub.shutdown();
-	tumcom_sub = node.subscribe(rosnamespace+"/tum_ardrone/com", 50, &LocateTargetJoystickControl::tumcomCallback, this);
+	tumcom_sub = node.subscribe(rosnamespace+"/tum_ardrone/com", 50, &TargetAggregationJoystickControl::tumcomCallback, this);
 
 	return;
 }
 
-LocateTargetJoystickControl::~LocateTargetJoystickControl(void)
+TargetAggregationJoystickControl::~TargetAggregationJoystickControl(void)
 {
 }
 
-void LocateTargetJoystickControl::run(void)
+void TargetAggregationJoystickControl::run(void)
 {
 	ros::Rate loop(50);	//update at 50Hz
 
@@ -48,7 +48,7 @@ void LocateTargetJoystickControl::run(void)
 	sendTUMComStringCommand("c stop", tumcom_pub);
 
 	//start monitoring detection tags
-	vision_sub = node.subscribe(rosnamespace+"/ardrone/navdata_vision_detect", 1, &LocateTargetJoystickControl::targetDetectedCallback, this);
+	vision_sub = node.subscribe(rosnamespace+"/ardrone/navdata_vision_detect", 1, &TargetAggregationJoystickControl::targetDetectedCallback, this);
 	ROS_INFO("started subscription to target detection on topic %s", vision_sub.getTopic().c_str());
 
 	while(state != LANDING)
@@ -60,7 +60,7 @@ void LocateTargetJoystickControl::run(void)
 }
 
 
-void LocateTargetJoystickControl::targetDetectedCallback(const ardrone_autonomy::navdata_vision_detect::ConstPtr& msg)
+void TargetAggregationJoystickControl::targetDetectedCallback(const ardrone_autonomy::navdata_vision_detect::ConstPtr& msg)
 {
 	/*ROS_INFO("target detect callback");
 	static int targetSeenCount = 0;
@@ -93,7 +93,7 @@ void LocateTargetJoystickControl::targetDetectedCallback(const ardrone_autonomy:
 }
 
 
-void LocateTargetJoystickControl::tumcomCallback(const std_msgs::String::ConstPtr& msg)
+void TargetAggregationJoystickControl::tumcomCallback(const std_msgs::String::ConstPtr& msg)
 {
 	/*Need to check for Command type messages on the channel. These
 	 * give information on what the current and next state will be.
@@ -151,7 +151,7 @@ void LocateTargetJoystickControl::tumcomCallback(const std_msgs::String::ConstPt
 }
 
 
-void LocateTargetJoystickControl::approachTarget(void)
+void TargetAggregationJoystickControl::approachTarget(void)
 {
 	ROS_INFO("Target detected!\nAborting search and approaching target.");
 	state = APPROACHING;

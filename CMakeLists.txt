@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ardrone_demonstrations_York)
+project(ardrone_demonstrations_york)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -73,8 +73,8 @@ include_directories(include
 # add_executable(test_flights_node src/test_flights_node.cpp)
 add_executable(BlueDanubeR src/Drone.cpp src/BlueDanubeR.cpp)
 add_executable(BlueDanubeL src/Drone.cpp src/BlueDanubeL.cpp)
-add_executable(TargetAggregation src/LocateTarget.cpp src/main_LocateTarget.cpp)
-add_executable(TargetAggregation_joystick src/LocateTarget.cpp src/LocateTargetJoystickControl.cpp src/main_LocateTargetJoystick.cpp)
+add_executable(TargetAggregation src/TargetAggregation.cpp src/main_TargetAggregation.cpp)
+add_executable(TargetAggregation_joystick src/TargetAggregation.cpp src/TargetAggregationJoystickControl.cpp src/main_TargetAggregationJoystick.cpp)
 
 
 ## Add cmake target dependencies of the executable/library

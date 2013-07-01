@@ -3,7 +3,7 @@
 #include <string>
 
 #include "ardrone_autonomy/LedAnim.h"
-#include "LocateTarget.h"
+#include "TargetAggregation.h"
 
 
 /* The drone will publish information about any targets it detects on the
@@ -14,7 +14,7 @@
  * */
 
 
-LocateTarget::LocateTarget(void)
+TargetAggregation::TargetAggregation(void)
 {
 	//create publishers and subscribers etc.
 	/*std::string navdata_channel_name = node.resolveName("ardrone/navdata");
@@ -29,23 +29,23 @@ LocateTarget::LocateTarget(void)
 	rosnamespace = node.getNamespace();
 	tumcom_pub = node.advertise<std_msgs::String>(rosnamespace+"/tum_ardrone/com", 50);
 	otherDrones_pub = node.advertise<std_msgs::String>("/followerdrones", 50);
-	tumcom_sub = node.subscribe(rosnamespace+"/tum_ardrone/com", 50, &LocateTarget::tumcomCallback, this);
-	land_sub = node.subscribe(rosnamespace+"/ardrone/land", 1, &LocateTarget::landSubscriptionCallback, this);
+	tumcom_sub = node.subscribe(rosnamespace+"/tum_ardrone/com", 50, &TargetAggregation::tumcomCallback, this);
+	land_sub = node.subscribe(rosnamespace+"/ardrone/land", 1, &TargetAggregation::landSubscriptionCallback, this);
 	leds_client = node.serviceClient<ardrone_autonomy::LedAnim>(rosnamespace+"/ardrone/setledanimation");
-	sendCoords_srv = node.advertiseService(rosnamespace+"/sendCoords", &LocateTarget::serviceSendCoordsCallback, this);
-	wakeUpFollowers_srv = node.advertiseService(rosnamespace+"/wakeupFollowers", &LocateTarget::serviceWakeUpFollowersCallback, this);
+	sendCoords_srv = node.advertiseService(rosnamespace+"/sendCoords", &TargetAggregation::serviceSendCoordsCallback, this);
+	wakeUpFollowers_srv = node.advertiseService(rosnamespace+"/wakeupFollowers", &TargetAggregation::serviceWakeUpFollowersCallback, this);
 
 	setLEDSignal(8); //green
 	ROS_INFO("initialised LocateTarget");
 	ROS_INFO("tumcom_pub writes to %s", tumcom_pub.getTopic().c_str());
 	ROS_INFO("tumcom_sub reads from %s", tumcom_sub.getTopic().c_str());
 	ROS_INFO("otherDrones_pub writes to %s", otherDrones_pub.getTopic().c_str());
-	ROS_INFO("resend coordinates service is on topic %s", resendCoords_srv.getService().c_str());
+	ROS_INFO("resend coordinates service is on topic %s", sendCoords_srv.getService().c_str());
 	ROS_INFO("wake up followers service is on topic %s", wakeUpFollowers_srv.getService().c_str());
 
 	return;
 }
-LocateTarget::~LocateTarget(void)
+TargetAggregation::~TargetAggregation(void)
 {
 	//land the drone
 	setLEDSignal(8); //green
@@ -54,7 +54,7 @@ LocateTarget::~LocateTarget(void)
 }
 
 
-void LocateTarget::run(void)
+void TargetAggregation::run(void)
 {
 	ros::Rate loop(50);	//update at 50Hz
 
@@ -69,7 +69,7 @@ void LocateTarget::run(void)
 	ROS_INFO("drone is now airborne");
 
 	//start monitoring detection tags
-	vision_sub = node.subscribe(rosnamespace+"/ardrone/navdata_vision_detect", 1, &LocateTarget::targetDetectedCallback, this);
+	vision_sub = node.subscribe(rosnamespace+"/ardrone/navdata_vision_detect", 1, &TargetAggregation::targetDetectedCallback, this);
 	ROS_INFO("started subscription to target detection on topic %s", vision_sub.getTopic().c_str());
 
 	while(state != LANDING)
@@ -80,7 +80,7 @@ void LocateTarget::run(void)
 	return;
 }
 
-void LocateTarget::setLEDSignal(int type)
+void TargetAggregation::setLEDSignal(int type)
 {
 	ardrone_autonomy::LedAnim ledMsg;
 	ledMsg.request.type = type;
@@ -90,13 +90,13 @@ void LocateTarget::setLEDSignal(int type)
 	return;
 }
 
-void LocateTarget::landSubscriptionCallback(const std_msgs::Empty::ConstPtr& msg)
+void TargetAggregation::landSubscriptionCallback(const std_msgs::Empty::ConstPtr& msg)
 {
 	state = LANDING;
 	return;
 }
 
-void LocateTarget::targetDetectedCallback(const ardrone_autonomy::navdata_vision_detect::ConstPtr& msg)
+void TargetAggregation::targetDetectedCallback(const ardrone_autonomy::navdata_vision_detect::ConstPtr& msg)
 {
 	static int targetSeenCount = 0;
 	//this function will be called, even if there are no targets detected
@@ -127,7 +127,7 @@ void LocateTarget::targetDetectedCallback(const ardrone_autonomy::navdata_vision
 	return;
 }
 
-void LocateTarget::tumcomCallback(const std_msgs::String::ConstPtr& msg)
+void TargetAggregation::tumcomCallback(const std_msgs::String::ConstPtr& msg)
 {
 	/*Need to check for Command type messages on the channel. These
 	 * give information on what the current and next state will be.
@@ -192,7 +192,7 @@ void LocateTarget::tumcomCallback(const std_msgs::String::ConstPtr& msg)
 }
 
 
-void LocateTarget::approachTarget(void)
+void TargetAggregation::approachTarget(void)
 {
 	ROS_INFO("Target detected!\nAborting search and approaching target.");
 	state = APPROACHING;
@@ -209,7 +209,7 @@ void LocateTarget::approachTarget(void)
 	return;
 }
 
-void LocateTarget::wakeUpFollowers(void)
+void TargetAggregation::wakeUpFollowers(void)
 {
 	ROS_INFO("waking up other drones.");
 
@@ -221,7 +221,7 @@ void LocateTarget::wakeUpFollowers(void)
 	sendTUMComStringCommand("c autoInit 500 800 5000 0.5", otherDrones_pub);
 }
 
-void LocateTarget::sendTargetCoordinatesToFollowers(double x, double y, double z)
+void TargetAggregation::sendTargetCoordinatesToFollowers(double x, double y, double z)
 {
 	ROS_INFO("Sending coordinates [%2.2f, %2.2f, %2.2f] to drones", x, y, z);
 	//ROS_WARN("This function is not yet written. No recruitment is actually happening");
@@ -230,7 +230,7 @@ void LocateTarget::sendTargetCoordinatesToFollowers(double x, double y, double z
 	//sendTUMComCoordianteCommand("goto", 0,1,1,0, otherDrones_pub);
 }
 
-void LocateTarget::recruitOtherDrones(void)
+void TargetAggregation::recruitOtherDrones(void)
 {
 	ROS_INFO("Recruiting other drones to this location.");
 	state = RECRUITING;
@@ -241,11 +241,11 @@ void LocateTarget::recruitOtherDrones(void)
 	sendTUMComClearCommand(tumcom_pub);
 
 	//find current location and	send it to other drones
-	position_sub = node.subscribe(rosnamespace+"/ardrone/predictedPose", 10, &LocateTarget::predictedPoseCallback, this);
+	position_sub = node.subscribe(rosnamespace+"/ardrone/predictedPose", 10, &TargetAggregation::predictedPoseCallback, this);
 	ROS_INFO("started subscription to predictedPose on topic %s", position_sub.getTopic().c_str());
 }
 
-bool LocateTarget::serviceSendCoordsCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& rep)
+bool TargetAggregation::serviceSendCoordsCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& rep)
 {
 	ROS_INFO("send coordinates service requested");
 	if(position_sub == NULL)
@@ -256,14 +256,14 @@ bool LocateTarget::serviceSendCoordsCallback(std_srvs::Empty::Request& req, std_
 	return false;
 }
 
-bool LocateTarget::serviceWakeUpFollowersCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& rep)
+bool TargetAggregation::serviceWakeUpFollowersCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& rep)
 {
 	ROS_INFO("wake up other drones service requested");
 	wakeUpFollowers();
 	return true;
 }
 
-void LocateTarget::predictedPoseCallback(const tum_ardrone::filter_state::ConstPtr& msg)
+void TargetAggregation::predictedPoseCallback(const tum_ardrone::filter_state::ConstPtr& msg)
 {
 	static double x=0;
 	static double y=0;
@@ -307,7 +307,7 @@ void LocateTarget::predictedPoseCallback(const tum_ardrone::filter_state::ConstP
 	return;
 }
 
-void LocateTarget::sendInitialisationCommandsToAutopilot(void)
+void TargetAggregation::sendInitialisationCommandsToAutopilot(void)
 {
 	ros::Rate(0.5).sleep(); //sleep for half second
 	ROS_INFO("Initialising TUM state estimation and autopilot");
@@ -329,7 +329,7 @@ void LocateTarget::sendInitialisationCommandsToAutopilot(void)
  * Publishes commands to autopilot.
  * A list of commands is available from http://ros.org/wiki/tum_ardrone/drone_autopilot
  * */
-void LocateTarget::sendSearchWallCommandsToAutopilot(void)
+void TargetAggregation::sendSearchWallCommandsToAutopilot(void)
 {
 	const double searchSpaceHeight = 0.75;
 	const double xDistanceToMoveWhenSearching = 0.25;
@@ -369,12 +369,12 @@ void LocateTarget::sendSearchWallCommandsToAutopilot(void)
 	return;
 }
 
-void LocateTarget::sendTUMComClearCommand(ros::Publisher& tumcompub)
+void TargetAggregation::sendTUMComClearCommand(ros::Publisher& tumcompub)
 {
 	sendTUMComStringCommand("c clearCommands", tumcompub);
 }
 
-void LocateTarget::sendTUMComStringCommand(const char* cmd, ros::Publisher& tumcompub)
+void TargetAggregation::sendTUMComStringCommand(const char* cmd, ros::Publisher& tumcompub)
 {
 	std_msgs::String msg;
 	msg.data = cmd;
@@ -382,7 +382,7 @@ void LocateTarget::sendTUMComStringCommand(const char* cmd, ros::Publisher& tumc
 	ROS_INFO("send TUMCom command \"%s\" on topic %s", cmd, tumcompub.getTopic().c_str());
 }
 
-void LocateTarget::sendTUMComCoordianteCommand(const char* cmd, double x, double y, double z, double yaw, ros::Publisher& tumcompub)
+void TargetAggregation::sendTUMComCoordianteCommand(const char* cmd, double x, double y, double z, double yaw, ros::Publisher& tumcompub)
 {
 	std_msgs::String out;
 	char str[64];
@@ -394,28 +394,28 @@ void LocateTarget::sendTUMComCoordianteCommand(const char* cmd, double x, double
 	return;
 }
 
-bool LocateTarget::isTUMComControllingMessage(const std::string msg)
+bool TargetAggregation::isTUMComControllingMessage(const std::string msg)
 {
 	//compare chars 0 to 15 of msg to given string:
 	int comp = msg.compare(0, 15, "u c Controlling");
 	return (comp == 0);
 }
 
-bool LocateTarget::isTUMComCurrentCommandAutoInit(const std::string cmd)
+bool TargetAggregation::isTUMComCurrentCommandAutoInit(const std::string cmd)
 {
 	std::size_t found = cmd.find("autoInit");
 	//find returns std::string::npos if not found
 	return (found != std::string::npos);
 }
 
-bool LocateTarget::isTUMComCurrentCommandLand(const std::string cmd)
+bool TargetAggregation::isTUMComCurrentCommandLand(const std::string cmd)
 {
 	std::size_t found = cmd.find("land");
 	//find returns std::string::npos if not found
 	return (found != std::string::npos);
 }
 
-bool LocateTarget::isTUMComCurrentCommandNULL(const std::string cmd)
+bool TargetAggregation::isTUMComCurrentCommandNULL(const std::string cmd)
 {
 	std::size_t found = cmd.find("NULL");
 	//find returns std::string::npos if not found
