@@ -45,7 +45,7 @@ Blue Danube Dance
 
 This demonstration requires you to have [set up multiple drones](#using-multiple-drones).
 
-The driver launch files needs to be edited to your particular wifi set up. The example files `bd_64.xml`, `bd_66.xml` and `bd_68.xml` can be copied and edited so that the IP address arguement the node is given on initialisation, is the correct IP address of the drone you want to connect to. 
+The driver launch files needs to be edited to your particular wifi set up. The example files [bd_64.xml](launch/bd_64.launch), [bd_66.xml](launch/bd_66.launch) and [bd_68.xml](launch/bd_68.launch) can be copied and edited so that the IP address arguement the node is given on initialisation, is the correct IP address of the drone you want to connect to. 
 So:
 ```xml
 <node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true"  args="-ip 192.168.1.64">
@@ -62,15 +62,60 @@ The `bluedanube_driver.launch` file should then be edited so that the `dronesL` 
 In a terminal window, `cd` into the ARDrone Demonstrations York directory.
 Run each of the following commands in a different terminal tab:
 * `roscore`
-* `roslaunch bluedanube_driver.launch`
+* `roslaunch ardrone_demonstrations_york bluedanube_driver.launch`
 * `sh bluedanube.sh`
+
 The first line launches ROS, the second command starts the ardrone_autonomy driver. The last line runs a script that will start playing the blue danube tune, and starts the dance.
+
+
+Joystick Controlled Aggregation
+-------------------------------
+
+### Set up
+This demonstration requires you to have [set up multiple drones](#using-multiple-drones).
+
+As with the [joystick control of one drone demo](#joystick-control-of-one-drone), this code is optimised for the Logitech Extreme 3D pro joystick. The TUM autopilot specific buttons can be re-mapped by changing lines 146 to 149 of <src/joystick2TUMARDroneInterpreter.py>. The current mapping is:
+* Send Coords to followers: 7
+* Reset PTAM (the feature tracking): 8
+* Land the follower drones: 9
+* Start the follower drones: 10
+
+The driver launch files needs to be edited to your particular wifi set up. The example files [ta_64.xml](launch/ta_64.launch), [ta_66.xml](launch/ta_66.launch) and [ta_68.xml](launch/ta_68.launch) can be copied and edited so that the IP address arguement the node is given on initialisation, is the correct IP address of the drone you want to connect to. 
+So:
+```xml
+<node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true"  args="-ip 192.168.1.64">
+	...
+	...
+</node>
+```
+The `args="-ip 192.168.1.64"` bit is the part that should be changed, the rest should be left the same.
+
+
+Finally, the <launch/autopilot_joystick_multi.launch> script needs to be updated so that the joystick-controlled leader drone uses the IP of the drone you want to be the leader. The follower drones should use the IP address of the drone you want to be a follower. An arbitary number of followers can be used by adding more groups like the `follower1` group and specifying different drones to be followers. Remember that the more drones there are in the swarm, the more likely they are to crash into each other.
+
+### Execution
+In a terminal window, `cd` into the ARDrone Demonstrations York directory.
+Run each of the following commands in a different terminal tab:
+* `roscore`
+* `roslaunch ardrone_demonstrations_york autopilot_joystick_multi.launch`
+* `rosrun ardrone_demonstrations_york TargetAggregation_joystick`
+
+### Running the Demonstration
+When you launch the drivers, several windows will open up. There should be a Map estimation, and (once the ardrone_autonomy driver has connected to the drone) a camera feed.
+
+Running the TargetAggregation_joystick node will cause one of the drones to take off and initialise the TUM state estimation node. The initialisation will have finished when there are coloured blobs on the camera feed window relating to visual features of the image (for example <http://ros.org/wiki/tum_ardrone/drone_stateestimation#Video_Window>).
+
+* Once the leader's state estimation has initialised, use the joystick to navigate the drone to some desired position, then press the button to start the follower drones (by default this should be the button labelled 10 on your joystick). 
+* Once the _follower drone(s)_ has initialised their state estimation, press the joystick button to send the leader's coordinates to the followers (by default this should be the button labelled 7 on your joystick).
+* Ideally, the followers will move to approximately where the leader drone is.
+* You can move the leader drone and send more coordinates to the followers, and (ideally) they will move to that new position.
+* To finish the demo press the button to land the followers (by default this should be the button labelled 9 on your joystick), and land the leader drone with the joystick.
 
 Using Multiple Drones
 ---------------------
 
 To control multiple drones with ROS, you can set each drone to join the same ad-hoc wifi network, instead of each drone creating its own ad-hoc wifi network. Instructions on doing this can be found at:
-* https://github.com/AutonomyLab/ardrone_autonomy/wiki/Multiple-AR-Drones
+* <https://github.com/AutonomyLab/ardrone_autonomy/wiki/Multiple-AR-Drones>
 
 To then control the drones, you can connect your computer to the drones' ad-hoc network and run the ROS launch scripts.
 These launch scripts are optimised for the swarm set up at the University of York, but can be easily modified to any swarm of ARDrones by altering the IP addresses used to launch ardrone_autonomy drivers.
