@@ -3,11 +3,6 @@ ARDrone Demonstrations York
 
 A collection of swarm robot demonstrations using Parrot AR Drones.
 
-This code assumes the following packages are installed:
-* ROS: www.ros.org
-* ardrone_autonomy: [ardrone_autonomy rosbuild](https://github.com/AutonomyLab/ardrone_autonomy) [ardrone_autonomy catkin](https://github.com/jennyhasahat/ardrone_autonomy)
-* tum_ardrone: [tum_ardrone rosbuild](https://github.com/tum-vision/tum_ardrone) [tum_ardrone catkin](https://github.com/jennyhasahat/tum_ardrone)
-
 There are 3 demonstrations included in this ROS package:
 * A simple joystick controller of one drone
 * A dance to the Blue Danube tune
@@ -15,6 +10,11 @@ There are 3 demonstrations included in this ROS package:
 
 Installation
 ------------
+
+This code assumes the following packages are installed:
+* ROS: www.ros.org
+* ardrone_autonomy: [ardrone_autonomy (catkin build)](https://github.com/jennyhasahat/ardrone_autonomy)
+* tum_ardrone: [tum_ardrone (catkin build)](https://github.com/jennyhasahat/tum_ardrone)
 
 To install this package, navigate to the `src` folder in your ROS workspace:
 ```sh
@@ -30,8 +30,11 @@ Joystick Control of One Drone
 --------------------------------
 
 This demonstration requires one drone.
+
 1. Connect to the drone over wifi
+
 2. Start the ROS core by entering `roscore` into a terminal
+
 3. In a new terminal tab or window launch `joystick-controlled-drone.launch`:
 ```sh
 roslaunch ardrone_demonstrations_york joystick-controlled-drone.launch
